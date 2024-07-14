@@ -1,0 +1,60 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Setup Env
+    command: |
+      # setup .env file:
+      echo "NEO4J_URI=${NEO4J_URI}" > .env
+      echo "NEO4J_USERNAME=${NEO4J_USERNAME}" >> .env
+      echo "NEO4J_PASSWORD=${NEO4J_PASSWORD}" >> .env
+      echo "NEO4J_DATABASE=${NEO4J_DATABASE}" >> .env
+      echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> .env
+
+      echo "BLOOM_URL=https://workspace-preview.neo4j.io/workspace/explore?connectURL={CONNECT_URL}&search=Show+me+a+graph&featureGenAISuggestions=true&featureGenAISuggestionsInternal=true" >> frontend/.env
+      echo 'REACT_APP_SOURCES="local,youtube,wiki,s3,web"' >> frontend/.env
+      echo 'LLM_MODELS="diffbot,openai-gpt-3.5,openai-gpt-4o"' >> frontend/.env
+      echo "ENV=DEV" >> frontend/.env
+      echo "TIME_PER_CHUNK=4" >> frontend/.env
+      echo "TIME_PER_PAGE=50" >> frontend/.env
+      echo "CHUNK_SIZE=5242880" >> frontend/.env
+      echo "LARGE_FILE_SIZE=5242880" >> frontend/.env
+      echo "GOOGLE_CLIENT_ID=" >> frontend/.env
+      echo "CHAT_MODES=" >> frontend/.env
+
+      # copy .env Datei into backend-dir
+      cp .env backend/.env
+
+  - name: Start backend
+    command: |
+
+      # Install requirements backend
+      cd backend
+      pip install -r requirements.txt
+
+      # configure backend api url        
+      echo "BACKEND_API_URL=$(gp url 8000)" >> ../frontend/.env
+
+      # Start backend Server
+      uvicorn score:app --host 0.0.0.0 --port 8000 --reload  
+      
+  - name: Start frontend
+    command: | 
+      # Install libs Frontend
+      cd frontend
+      nvm install 20
+      nvm use 20
+      yarn install
+
+      # Start Frontend
+      yarn run dev
+
+ports:
+  - port: 8000
+    onOpen: notify
+    visibility: public
+
+  - port: 5173
+    onOpen: open-browser
+    visibility: public
+

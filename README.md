@@ -2,6 +2,8 @@
 
 Creating knowledge graphs from unstructured data
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/https://github.com/neo4j-labs/llm-graph-builder)
+
 
 # LLM Graph Builder
 

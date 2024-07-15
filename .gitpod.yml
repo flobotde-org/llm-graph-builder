@@ -21,7 +21,7 @@ tasks:
       echo "UPDATE_GRAPH_CHUNKS_PROCESSED=20" >> .env
       echo "LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}" >> .env
       echo "LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT}" >> .env
-      echo "LANGCHAIN_TRACING_V2=true" >> .env
+      echo "LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2}" >> .env
       echo "LANGCHAIN_ENDPOINT=https://api.smith.langchain.com" >> .env
       echo "GCS_FILE_CACHE=False" >> .env
       echo "ENTITY_EMBEDDING=True" >> .env

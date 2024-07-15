@@ -10,20 +10,35 @@ tasks:
       echo "NEO4J_PASSWORD=${NEO4J_PASSWORD}" >> .env
       echo "NEO4J_DATABASE=${NEO4J_DATABASE}" >> .env
       echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> .env
+      echo "DIFFBOT_API_KEY=${DIFFBOT_API_KEY}" >> .env
+      echo "EMBEDDING_MODEL=all-MiniLM-L6-v2" >> .env
+      echo "IS_EMBEDDING=true" >> .env
+      echo "KNN_MIN_SCORE=0.94" >> .env
+      echo "GEMINI_ENABLED=${GEMINI_ENABLED}" >> .env
+      echo "# LLM_MODEL_CONFIG_ollama_llama3=llama3,http://host.docker.internal:11434" >> .env
+      echo "GCP_LOG_METRICS_ENABLED=False" >> .env
+      echo "NUMBER_OF_CHUNKS_TO_COMBINE=6" >> .env
+      echo "UPDATE_GRAPH_CHUNKS_PROCESSED=20" >> .env
+      echo "LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}" >> .env
+      echo "LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT}" >> .env
+      echo "LANGCHAIN_TRACING_V2=true" >> .env
+      echo "LANGCHAIN_ENDPOINT=https://api.smith.langchain.com" >> .env
+      echo "GCS_FILE_CACHE=False" >> .env
+      echo "ENTITY_EMBEDDING=True" >> .env
+      echo "#BACKEND_API_URL=http://localhost:8000" >> .env
+      echo 'BLOOM_URL="https://workspace-preview.neo4j.io/workspace/explore?connectURL={CONNECT_URL}&search=Show+me+a+graph&featureGenAISuggestions=true&featureGenAISuggestionsInternal=true"' >> .env
+      echo 'REACT_APP_SOURCES="local,youtube,wiki,s3,web"' >> .env
+      echo 'LLM_MODELS="diffbot,openai-gpt-3.5,openai-gpt-4o" # ",ollama_llama3"' >> .env
+      echo "ENV=DEV" >> .env
+      echo "TIME_PER_CHUNK=4" >> .env
+      echo "TIME_PER_PAGE=50" >> .env
+      echo "CHUNK_SIZE=5242880" >> .env
+      echo "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}" >> .env
+      echo "CHAT_MODES=${CHAT_MODES}" >> .env
 
-      echo "BLOOM_URL=https://workspace-preview.neo4j.io/workspace/explore?connectURL={CONNECT_URL}&search=Show+me+a+graph&featureGenAISuggestions=true&featureGenAISuggestionsInternal=true" >> frontend/.env
-      echo 'REACT_APP_SOURCES="local,youtube,wiki,s3,web"' >> frontend/.env
-      echo 'LLM_MODELS="diffbot,openai-gpt-3.5,openai-gpt-4o"' >> frontend/.env
-      echo "ENV=DEV" >> frontend/.env
-      echo "TIME_PER_CHUNK=4" >> frontend/.env
-      echo "TIME_PER_PAGE=50" >> frontend/.env
-      echo "CHUNK_SIZE=5242880" >> frontend/.env
-      echo "LARGE_FILE_SIZE=5242880" >> frontend/.env
-      echo "GOOGLE_CLIENT_ID=" >> frontend/.env
-      echo "CHAT_MODES=" >> frontend/.env
-
-      # copy .env Datei into backend-dir
+      # copy .env Datei into backend & frontend-dir
       cp .env backend/.env
+      cp .env frontend/.env
 
   - name: Start backend
     command: |

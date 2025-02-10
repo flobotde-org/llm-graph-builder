@@ -17,6 +17,9 @@ import {
   llms,
   RETRY_OPIONS,
   tooltips,
+  tokenchunkSize,
+  chunkOverlap,
+  chunksToCombine,
 } from '../utils/Constants';
 import ButtonWithToolTip from './UI/ButtonWithToolTip';
 import DropdownComponent from './Dropdown';
@@ -81,9 +84,15 @@ const Content: React.FC<ContentProps> = ({
     setModel,
     selectedNodes,
     selectedRels,
+    selectedTokenChunkSize,
+    selectedChunk_overlap,
+    selectedChunks_to_combine,
     setSelectedNodes,
     setRowSelection,
     setSelectedRels,
+    setSelectedTokenChunkSize,
+    setSelectedChunk_overlap,
+    setSelectedChunks_to_combine,
     postProcessingTasks,
     queue,
     processedCount,
@@ -283,6 +292,9 @@ const Content: React.FC<ContentProps> = ({
         fileItem.gcsBucketFolder ?? '',
         selectedNodes.map((l) => l.value),
         selectedRels.map((t) => t.value),
+        selectedTokenChunkSize,
+        selectedChunk_overlap,
+        selectedChunks_to_combine,
         fileItem.googleProjectId,
         fileItem.language,
         fileItem.accessToken,
@@ -532,8 +544,9 @@ const Content: React.FC<ContentProps> = ({
   const handleOpenGraphClick = () => {
     const bloomUrl = process.env.VITE_BLOOM_URL;
     const uriCoded = userCredentials?.uri.replace(/:\d+$/, '');
-    const connectURL = `${uriCoded?.split('//')[0]}//${userCredentials?.userName}@${uriCoded?.split('//')[1]}:${userCredentials?.port ?? '7687'
-      }`;
+    const connectURL = `${uriCoded?.split('//')[0]}//${userCredentials?.userName}@${uriCoded?.split('//')[1]}:${
+      userCredentials?.port ?? '7687'
+    }`;
     const encodedURL = encodeURIComponent(connectURL);
     const replacedUrl = bloomUrl?.replace('{CONNECT_URL}', encodedURL);
     window.open(replacedUrl, '_blank');
@@ -554,6 +567,12 @@ const Content: React.FC<ContentProps> = ({
     setUserCredentials({ uri: '', password: '', userName: '', database: '', email: '' });
     setSelectedNodes([]);
     setSelectedRels([]);
+    localStorage.removeItem('selectedTokenChunkSize');
+    setSelectedTokenChunkSize(tokenchunkSize);
+    localStorage.removeItem('selectedChunk_overlap');
+    setSelectedChunk_overlap(chunkOverlap);
+    localStorage.removeItem('selectedChunks_to_combine');
+    setSelectedChunks_to_combine(chunksToCombine);
     localStorage.removeItem('instructions');
     setAdditionalInstructions('');
     setMessages([
@@ -702,7 +721,8 @@ const Content: React.FC<ContentProps> = ({
     const selectedRows = childRef.current?.getSelectedRows();
     if (selectedRows?.length) {
       const expiredFilesExists = selectedRows.some(
-        (c) => isFileReadyToProcess(c, true) && isExpired((c?.createdAt as Date) ?? new Date()));
+        (c) => isFileReadyToProcess(c, true) && isExpired((c?.createdAt as Date) ?? new Date())
+      );
       const largeFileExists = selectedRows.some(
         (c) => isFileReadyToProcess(c, true) && typeof c.size === 'number' && c.size > largeFileSize
       );

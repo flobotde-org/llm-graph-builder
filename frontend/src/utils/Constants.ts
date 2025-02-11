@@ -24,6 +24,7 @@ export const llms =
         'azure_ai_gpt_35',
         'azure_ai_gpt_4o',
         'ollama_llama3',
+        'ollama_llama32',
         'ollama_deepseek_r1',    
         'groq_llama3_70b',
         'anthropic_claude_3_5_sonnet',
